@@ -44,12 +44,18 @@ class TestBestAvailableSeat < Minitest::Test
 
   def test_find_best_seats
     theatre = BestAvailableSeat.make_theatre(3, 3, ["a1", "a2", "a3"])
-    assert_equal("b2", @bas.find_best_seat(theatre.to_json))
+    h = JSON.parse(theatre.to_json) # hack to convert keys
+    rtn = @bas.find_best_seat(h)
+    assert_equal("b2", rtn[:seat])
 
     theatre = BestAvailableSeat.make_theatre(3, 3, ["a1", "a3", "b2"])
-    assert_equal("a2", @bas.find_best_seat(theatre.to_json))
+    h = JSON.parse(theatre.to_json) # hack to convert keys
+    rtn = @bas.find_best_seat(h)
+    assert_equal("a2", rtn[:seat])
 
     theatre = BestAvailableSeat.make_theatre(3, 3, ["a1", "a2", "b2"])
-    assert_equal("a3", @bas.find_best_seat(theatre.to_json))
+    h = JSON.parse(theatre.to_json) # hack to convert keys
+    rtn = @bas.find_best_seat(h)
+    assert_equal("a3", rtn[:seat])
   end
 end

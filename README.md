@@ -11,9 +11,9 @@ Run the test suite with:
 ## Run script
 Run the script with:
 
-    $ ./bas.rb theatre.json
+    $ ./bas.rb -f theatre.json
 
 ## Generate a theatre json file
-You can use this script to generate a json file of a sample theatre.
+You can use this script to generate a json file of a sample theatre. Currently this option doesnt allow you to specify unavailable seats.
 
     $ ./bas.rb generate > theatre.json

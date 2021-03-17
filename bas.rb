@@ -3,8 +3,8 @@
 require "json"
 
 class BestAvailableSeat
-  def initialize(file)
-    @json = read_and_validate_json(file)
+  def initialize(file = nil)
+    @json = read_and_validate_json(file) if file
   end
 
   def read_and_validate_json(file)
@@ -13,9 +13,10 @@ class BestAvailableSeat
     puts "Invalid JSON"
   end
 
-  def find_best_seat
-    venue = @json["venue"]
-    seats = @json["seats"]
+  def find_best_seat(json = nil)
+    json ||= @json
+    venue = json["venue"]
+    seats = json["seats"]
 
     num_rows = venue["layout"]["rows"] # letters
     num_cols = venue["layout"]["columns"] # numbers
@@ -68,12 +69,14 @@ class BestAvailableSeat
   end
 end
 
-if ARGV.empty?
-  puts "Invalid option: either type 'generate' to create a theatre, or supply a json file"
-elsif ARGV[0] == "generate"
+if ARGV[0] == "generate"
   theatre = BestAvailableSeat.make_theatre(10, 50, ["a2", "b2"])
   puts JSON.pretty_generate(theatre)
-else
-  rtn = BestAvailableSeat.new(ARGV[0]).find_best_seat
+elsif ARGV[0] == "-f" && !ARGV[1].empty?
+  rtn = BestAvailableSeat.new(ARGV[1]).find_best_seat
   puts rtn[:msg]
+else
+  puts "Invalid option:"
+  puts "'generate' to create a theatre"
+  puts "-f <file> to supply a json file"
 end
